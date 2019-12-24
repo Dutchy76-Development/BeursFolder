@@ -1,0 +1,15 @@
+.root {
+    -fx-background-color: #f00;
+}
+
+#titleText {
+    -fx-font: 40px "Arial";
+}
+
+#agreementText {
+	-fx-font: 20px "Arial";
+}
+
+#updateMessageText {
+	-fx-font: 35px "Arial";
+}
