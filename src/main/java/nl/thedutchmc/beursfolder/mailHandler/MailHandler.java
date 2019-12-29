@@ -2,18 +2,26 @@ package nl.thedutchmc.beursfolder.mailHandler;
 
 import java.io.File;
 import java.util.Properties;
-import java.util.StringJoiner;
 
 import javax.mail.*;  
-import javax.mail.internet.*;  
+import javax.mail.internet.*;
+
+import nl.thedutchmc.beursfolder.BeursFolder;  
 
 public class MailHandler {
 
 	public void sendMail(String target, String firstName, String surName, boolean option1, boolean option2, boolean option3, boolean option4) {
 		
-		String username = "";
-		String password = "";
+		String EMAIL = BeursFolder.MAIL_USERNAME;
+		String PASSWORD = BeursFolder.MAIL_PASSWORD;
 		
+		String HOST = BeursFolder.HOST;
+		String PORT = BeursFolder.PORT;
+		String SSL_TRUST = BeursFolder.SSL_TRUST;
+		
+		boolean STARTTLS = BeursFolder.STARTTLS;
+		boolean AUTH = BeursFolder.AUTH;
+
 		Properties properties = new Properties();
 		
 		//Information about the SMPT server
@@ -27,7 +35,7 @@ public class MailHandler {
 		Session session = Session.getInstance(properties, new Authenticator() {
 			@Override
 			protected PasswordAuthentication getPasswordAuthentication () {
-				return new PasswordAuthentication(username, password);
+				return new PasswordAuthentication(EMAIL, PASSWORD);
 			}
 		});
 		
@@ -35,7 +43,7 @@ public class MailHandler {
 		try {
 			
 			//Set basic info for the Email
-			message.setFrom(new InternetAddress("noreply@thedutchmc.nl"));
+			message.setFrom(new InternetAddress(EMAIL));
 			message.setRecipients(
 			Message.RecipientType.TO, InternetAddress.parse(target));
 			message.setSubject("Nog eentje dan, weer met een chart");

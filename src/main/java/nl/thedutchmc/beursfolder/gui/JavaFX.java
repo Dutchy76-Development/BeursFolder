@@ -17,6 +17,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import nl.thedutchmc.beursfolder.BeursFolder;
 import nl.thedutchmc.beursfolder.datahandler.DataHandler;
 import nl.thedutchmc.beursfolder.mailHandler.MailHandler;
 
@@ -31,7 +32,8 @@ public class JavaFX extends Application {
 	public void start(Stage primaryStage) throws Exception {
 		//set up the stage
 		primaryStage.initStyle(StageStyle.UNDECORATED);
-		primaryStage.setMaximized(true);
+		primaryStage.setMaximized(false);
+		primaryStage.setTitle("BeursFolder Interface");
 		
 		HBox emailFirstSurnameFields = new HBox();
 		HBox phoneCompanyFields = new HBox();
@@ -43,13 +45,20 @@ public class JavaFX extends Application {
 		Scene scene = new Scene(root);
 		primaryStage.setScene(scene);
 		
-		
+		//Set the CSS Stylesheet
 		scene.getStylesheets().add(JavaFX.class.getResource("styling.css").toExternalForm());
 
 		//Get the screensize
 		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 		double screenX = screenSize.getWidth();
+		double screenY = screenSize.getHeight();
 		
+		//Change size and position of the Stage (thus the application)
+		primaryStage.setX(0);
+		primaryStage.setY(0);
+		
+		primaryStage.setMinWidth(screenX);
+		primaryStage.setMinHeight(screenY);
 		
 		//Image
 		Image image = new Image(JavaFX.class.getResource("mrf_logo.png").toExternalForm());
@@ -57,84 +66,81 @@ public class JavaFX extends Application {
 		imageView.setFitHeight(275);
 		imageView.setFitWidth(454);
 		imageView.setPreserveRatio(true);
-		imageView.setY(100);
+		imageView.setY(20);
 		addToRoot.add(imageView);
 		
 		//Text objects
 		Text title = new Text();
 		title.setId("titleText");
-		title.setText("Subscribe to our mailing list.");
-		title.setY(500);
+		title.setText(BeursFolder.HEADER);
+		title.setY(imageView.getY() + imageView.getBoundsInParent().getHeight() + 40);
 		addToRoot.add(title);
 		
 		Text agreementText = new Text();
 		agreementText.setId("agreementText");
-		agreementText.setText("Agreement Here");
-		agreementText.setY(800);
+		agreementText.setText(BeursFolder.AGREEMENT);
+		agreementText.setY(screenY / 8 * 7 + 20); //TODO
 		addToRoot.add(agreementText);
 		
 		Text option1Text = new Text();
 		option1Text.setId("optionsText");
-		option1Text.setText("Option 1");
+		option1Text.setText(BeursFolder.OPTION1);
 		addToRoot.add(option1Text);
 		
 		Text option2Text = new Text();
 		option2Text.setId("optionsText");
-		option2Text.setText("Option 2");
+		option2Text.setText(BeursFolder.OPTION2);
 		addToRoot.add(option2Text);
 		
 		Text option3Text = new Text();
 		option3Text.setId("optionsText");
-		option3Text.setText("Option 3");
+		option3Text.setText(BeursFolder.OPTION3);
 		addToRoot.add(option3Text);
 		
 		Text option4Text = new Text();
 		option4Text.setId("optionsText");
-		option4Text.setText("Option 4");
+		option4Text.setText(BeursFolder.OPTION4);
 		addToRoot.add(option4Text);
 			
 		//Variable text objects
 		Text updateMessage = new Text();
 		updateMessage.setId("updateMessageText");
-		updateMessage.setY(850);
+		updateMessage.setY(screenY / 4 * 3);
 		addToRoot.add(updateMessage);
 		
 		//Text fields
 		TextField enterEmail = new TextField();
 		enterEmail.setId("textField");
-		enterEmail.setLayoutY(700);
 		enterEmail.setPromptText("Email...");
 		enterEmail.setPrefWidth(400);
 		addToRoot.add(enterEmail);
 		
 		TextField enterFirstName = new TextField();
 		enterFirstName.setId("textField");
-		enterFirstName.setLayoutY(700);
 		enterFirstName.setPromptText("First name...");
 		addToRoot.add(enterFirstName);
 		
 		TextField enterSurName = new TextField();
 		enterSurName.setId("textField");
-		enterSurName.setLayoutY(700);
 		enterSurName.setPromptText("Surname...");
 		addToRoot.add(enterSurName);
 		
 		TextField enterPhoneNumber = new TextField();
 		enterPhoneNumber.setId("textField");
-		enterPhoneNumber.setLayoutY(730);
+		enterPhoneNumber.setLayoutY(enterEmail.getLayoutY() + 30);
 		enterPhoneNumber.setPromptText("Phone number...");
 		addToRoot.add(enterPhoneNumber);
 		
 		TextField enterCompanyName = new TextField();
 		enterCompanyName.setId("TextField");
-		enterCompanyName.setLayoutY(730);
+		enterCompanyName.setLayoutY(enterPhoneNumber.getLayoutY());
 		enterCompanyName.setPromptText("Company...");
 		addToRoot.add(enterCompanyName);
 		
 		//Buttons
 		Button submitButton = new Button("Submit");
 		submitButton.setId("submitButton");
-		submitButton.setLayoutY(820);
+		submitButton.setLayoutY(screenY / 8 * 7 + 40);
 		addToRoot.add(submitButton);
 		
 		//Checkboxes
@@ -147,7 +153,7 @@ public class JavaFX extends Application {
 		CheckBox option4Box = new CheckBox();
 		
 		CheckBox agreementBox = new CheckBox();
-		agreementBox.setLayoutY(784);
+		agreementBox.setLayoutY(agreementText.getY() - agreementText.getBoundsInParent().getHeight());
 		addToRoot.add(agreementBox);
 
 		//Add all objects to the root group
@@ -155,8 +161,10 @@ public class JavaFX extends Application {
 			root.getChildren().add(node);
 		}
 		
-		//Show the stage
+		//Show the stage, and set it to be maximized
 		primaryStage.show();
+		
+		primaryStage.setMaximized(true);
 		
 		//Calculate Positions of all objects
 		title.setX((screenX /2) - (title.getBoundsInParent().getWidth() / 2)); // (screen width / 2) - (object size / 2)
@@ -168,13 +176,13 @@ public class JavaFX extends Application {
 		
 		emailFirstSurnameFields.getChildren().addAll(enterFirstName, enterSurName, enterEmail);
 		HBox.setMargin(enterSurName, new Insets(0,20,0,20));
-		emailFirstSurnameFields.setLayoutY(700);
+		emailFirstSurnameFields.setLayoutY(screenY / 4 * 3 + 30);
 		emailFirstSurnameFields.setLayoutX((screenX / 2) - (emailNameFields / 2));
 
 		//Phone number and company name fields		
 		phoneCompanyFields.getChildren().addAll(enterPhoneNumber, enterCompanyName);
 		HBox.setMargin(enterCompanyName, new Insets(0,0,0,20));
-		phoneCompanyFields.setLayoutY(730);
+		phoneCompanyFields.setLayoutY(emailFirstSurnameFields.getLayoutY() + 30);
 		phoneCompanyFields.setLayoutX(emailFirstSurnameFields.getLayoutX() + enterFirstName.getBoundsInParent().getWidth() + 20);
 		
 		//Agreement text and checkbox
@@ -190,9 +198,10 @@ public class JavaFX extends Application {
 		
 		option12.getChildren().addAll(option1Box, option1Text, option2Box, option2Text);
 		
-		HBox.setMargin(option2Box, new Insets(0,0,0,40));
+		HBox.setMargin(option2Box, new Insets(0,10,0,40));
+		HBox.setMargin(option1Box, new Insets(0,10,0,0));
 		
-		option12.setLayoutY(550);
+		option12.setLayoutY(title.getY() + title.getBoundsInParent().getHeight() + 20);
 		option12.setLayoutX((screenX / 2) - (options12Size / 2) - 20);
 		
 		//HBox for options 3 and 4
@@ -203,10 +212,11 @@ public class JavaFX extends Application {
 		
 		option34.getChildren().addAll(option3Box, option3Text, option4Box, option4Text);
 		
-		HBox.setMargin(option4Box, new Insets(0,0,0,40));
+		HBox.setMargin(option4Box, new Insets(0,10,0,40));
+		HBox.setMargin(option3Box, new Insets(0,10,0,0));
 		
 		option34.setLayoutX((screenX / 2) - (options34Size / 2) - 20);
-		option34.setLayoutY(650);
+		option34.setLayoutY(option12.getLayoutY() + option12.getBoundsInParent().getHeight() + 40);
 		
 		//EventHandlers
 		submitButton.setOnAction(actionEvent ->  {
