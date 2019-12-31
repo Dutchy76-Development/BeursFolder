@@ -19,6 +19,7 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import nl.thedutchmc.beursfolder.BeursFolder;
 import nl.thedutchmc.beursfolder.datahandler.DataHandler;
+import nl.thedutchmc.beursfolder.mailHandler.LinkGenerator;
 import nl.thedutchmc.beursfolder.mailHandler.MailHandler;
 
 public class JavaFX extends Application {
@@ -264,9 +265,20 @@ public class JavaFX extends Application {
 								updateMessage.setText("Success! You should receive an email from us soon!");
 								calculateErrorMessageBounds(updateMessage, screenX);
 								
-								//Everything is correct, send email and log the email+name to file
-								mailHandler.sendMail(email, firstName, surName, option1Box.isSelected(), option2Box.isSelected(), option3Box.isSelected(), option4Box.isSelected());
-								dataHandler.storeInFile(email, firstName, surName, enterCompanyName.getText(), enterPhoneNumber.getText(), agreementBox.isSelected(), option1Box.isSelected(), option2Box.isSelected(), option3Box.isSelected(), option4Box.isSelected());
+								//Everything is correct, send email and log the email+name to file, all on their own Thread!
+								new Thread(new Runnable() {
+									@Override
+									public void run() {
+										mailHandler.sendMail(email, firstName, surName, option1Box.isSelected(), option2Box.isSelected(), option3Box.isSelected(), option4Box.isSelected(), enterCompanyName.getText(), enterPhoneNumber.getText());
+									}
+								}).start();
+								
+								new Thread(new Runnable() {
+									@Override
+									public void run() {
+										dataHandler.storeInFile(email, firstName, surName, enterCompanyName.getText(), enterPhoneNumber.getText(), agreementBox.isSelected(), option1Box.isSelected(), option2Box.isSelected(), option3Box.isSelected(), option4Box.isSelected());
+									}
+								}).start();
 								
 								//Empty all text fields and clear all checkboxes
 								enterEmail.setText("");
@@ -277,6 +289,8 @@ public class JavaFX extends Application {
 								option3Box.setSelected(false);
 								option4Box.setSelected(false);
 								agreementBox.setSelected(false);
+								enterPhoneNumber.setText("");
+								enterCompanyName.setText("");
 								
 							} else { //Email doesn't contain '@', thus invalid
 								updateMessage.setText("Invalid Email!");

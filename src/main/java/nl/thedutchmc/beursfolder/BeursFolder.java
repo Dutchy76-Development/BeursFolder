@@ -8,19 +8,41 @@ import java.io.IOException;
 import java.util.Properties;
 
 import nl.thedutchmc.beursfolder.gui.JavaFX;
+import nl.thedutchmc.beursfolder.mailHandler.LinkGenerator;
+import nl.thedutchmc.beursfolder.sockethandler.SocketHandler;
 
 public class BeursFolder {
-
-	public static String MAIL_USERNAME, MAIL_PASSWORD, HOST, PORT, SSL_TRUST, HEADER, OPTION1, OPTION2, OPTION3, OPTION4, AGREEMENT, TITLE, OPTION1URL, OPTION2URL, OPTION3URL, OPTION4URL;
+	//Variable which shouldn't be changable by the end-user
+	public static String REDIRECT_BASE_URL = "https://thedutchmc.nl/red/";
+	
+	public static String SERVER_ADDRESS = "localhost";
+	public static int SERVER_PORT = 8095;
+	
+	//Properties file variables
+	public static String MAIL_USERNAME, MAIL_PASSWORD, HOST, PORT, SSL_TRUST, SUBJECT, HEADER, OPTION1, OPTION2, OPTION3, OPTION4, AGREEMENT, TITLE, OPTION1URL, OPTION2URL, OPTION3URL, OPTION4URL, TOKEN;
 	public static boolean STARTTLS, AUTH;
 	
 	public static void main(String[] args) {
 		System.out.println("BeursAD started!");
 		
+		//Connect to the server
+		new Thread (new Runnable() {
+			@Override
+			public void run() {
+				final SocketHandler sh = new SocketHandler();
+				try {
+					sh.connect(false, "");
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		}).start();
+		
 		//Check if the config file location is given
 		if(args.length == 1) {
 			String configPath = args[0];
 			System.out.println("Reading config file...");
+			
 			final BeursFolder bf = new BeursFolder();
 			bf.readConfig(configPath);
 			
@@ -52,6 +74,9 @@ public class BeursFolder {
 				fw.write("appVersion = 1.0\n\n");
 				
 				fw.write("# Edit below this line!\n\n");
+				
+				fw.write("#Please enter the token you got from us here\n");
+				fw.write("token = \n\n");
 				
 				fw.write("#Email settings\n\n");
 				fw.write("#Example: \n");
@@ -118,6 +143,7 @@ public class BeursFolder {
 				} else {
 					AUTH = false;;;
 				}
+				SUBJECT = appProps.getProperty("subject");
 				
 				HEADER = appProps.getProperty("header");
 				
@@ -132,6 +158,13 @@ public class BeursFolder {
 				OPTION2URL = appProps.getProperty("option2_url");
 				OPTION3URL = appProps.getProperty("option3_url");
 				OPTION4URL = appProps.getProperty("option4_url");
+				
+				if(appProps.getProperty("token") != null || !(appProps.getProperty("token").equals(""))) {
+					TOKEN = appProps.getProperty("token");
+				} else {
+					System.err.println("No token given, exiting!");
+					System.exit(1);
+				}
 
 				
 			} catch (FileNotFoundException e) {
