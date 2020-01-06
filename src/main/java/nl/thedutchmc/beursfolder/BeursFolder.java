@@ -38,6 +38,26 @@ public class BeursFolder {
 			}
 		}).start();
 		
+		new Thread(new Runnable() {
+			@Override
+			public void run() {
+				System.out.println("Thread running");
+				while(true) {
+					if(JavaFX.enterEmail.isFocused()) {
+						JavaFX.selectedField = JavaFX.enterEmail;
+					} else if(JavaFX.enterFirstName.isFocused()) {
+						JavaFX.selectedField = JavaFX.enterFirstName;
+					} else if(JavaFX.enterSurName.isFocused()) {
+						JavaFX.selectedField = JavaFX.enterSurName;
+					} else if(JavaFX.enterCompanyName.isFocused()) {
+						JavaFX.selectedField = JavaFX.enterCompanyName;
+					} else if(JavaFX.enterPhoneNumber.isFocused()) {
+						JavaFX.selectedField = JavaFX.enterPhoneNumber;
+					}
+				}	
+			}
+		}).start();
+		
 		//Check if the config file location is given
 		if(args.length == 1) {
 			String configPath = args[0];
@@ -46,7 +66,10 @@ public class BeursFolder {
 			final BeursFolder bf = new BeursFolder();
 			bf.readConfig(configPath);
 			
+			//Start a new Thread to check which TextField is selected
+			
 			javafx.application.Application.launch(JavaFX.class);
+			
 		} else {
 			System.err.println("Config file path is not given!");
 		}
@@ -173,5 +196,9 @@ public class BeursFolder {
 				e.printStackTrace();
 			}	
 		}
+	}
+	
+	class CheckSelected extends Thread {
+
 	}
 }

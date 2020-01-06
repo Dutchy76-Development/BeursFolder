@@ -3,6 +3,10 @@ package nl.thedutchmc.beursfolder.gui;
 import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.scene.Group;
@@ -14,6 +18,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
@@ -29,6 +34,16 @@ public class JavaFX extends Application {
 	final MailHandler mailHandler = new MailHandler();
 	final DataHandler dataHandler = new DataHandler();
 	
+	public static TextField enterEmail = new TextField();
+	public static TextField enterFirstName = new TextField();
+	public static TextField enterSurName = new TextField();
+	public static TextField enterPhoneNumber = new TextField();
+	public static TextField enterCompanyName = new TextField();
+	
+	public static TextField selectedField;
+	
+	boolean capslock = false;
+	
 	@Override
 	public void start(Stage primaryStage) throws Exception {
 		//set up the stage
@@ -41,7 +56,16 @@ public class JavaFX extends Application {
 		HBox option12 = new HBox();
 		HBox option34 = new HBox();
 		
-		Group root = new Group(option12,option34, emailFirstSurnameFields, phoneCompanyFields);
+		HBox numberRow = new HBox();
+		HBox QPRow = new HBox();
+		HBox ALRow = new HBox();
+		HBox ShiftZMRow = new HBox();
+		HBox spaceSpecialChars = new HBox();
+		
+		VBox keyboard = new VBox();
+		keyboard.getChildren().addAll(numberRow, QPRow, ALRow, ShiftZMRow, spaceSpecialChars);
+		
+		Group root = new Group(option12,option34, emailFirstSurnameFields, phoneCompanyFields, keyboard);
 		root.setId("root");
 		Scene scene = new Scene(root);
 		primaryStage.setScene(scene);
@@ -80,7 +104,7 @@ public class JavaFX extends Application {
 		Text agreementText = new Text();
 		agreementText.setId("agreementText");
 		agreementText.setText(BeursFolder.AGREEMENT);
-		agreementText.setY(screenY / 8 * 7 + 20); //TODO
+		agreementText.setY(screenY / 8 * 7 + 20);
 		addToRoot.add(agreementText);
 		
 		Text option1Text = new Text();
@@ -110,29 +134,27 @@ public class JavaFX extends Application {
 		addToRoot.add(updateMessage);
 		
 		//Text fields
-		TextField enterEmail = new TextField();
+
 		enterEmail.setId("textField");
 		enterEmail.setPromptText("Email...");
 		enterEmail.setPrefWidth(400);
 		addToRoot.add(enterEmail);
 		
-		TextField enterFirstName = new TextField();
+	
 		enterFirstName.setId("textField");
 		enterFirstName.setPromptText("First name...");
 		addToRoot.add(enterFirstName);
 		
-		TextField enterSurName = new TextField();
+		
 		enterSurName.setId("textField");
 		enterSurName.setPromptText("Surname...");
 		addToRoot.add(enterSurName);
 		
-		TextField enterPhoneNumber = new TextField();
 		enterPhoneNumber.setId("textField");
 		enterPhoneNumber.setLayoutY(enterEmail.getLayoutY() + 30);
 		enterPhoneNumber.setPromptText("Phone number...");
 		addToRoot.add(enterPhoneNumber);
 		
-		TextField enterCompanyName = new TextField();
 		enterCompanyName.setId("TextField");
 		enterCompanyName.setLayoutY(enterPhoneNumber.getLayoutY());
 		enterCompanyName.setPromptText("Company...");
@@ -156,7 +178,7 @@ public class JavaFX extends Application {
 		CheckBox agreementBox = new CheckBox();
 		agreementBox.setLayoutY(agreementText.getY() - agreementText.getBoundsInParent().getHeight());
 		addToRoot.add(agreementBox);
-
+		
 		//Add all objects to the root group
 		for(Node node : addToRoot) {
 			root.getChildren().add(node);
@@ -263,8 +285,7 @@ public class JavaFX extends Application {
 							if(containsAtSymbol) {
 								//Remove errorMessage
 								updateMessage.setText("Success! You should receive an email from us soon!");
-								calculateErrorMessageBounds(updateMessage, screenX);
-								
+								calculateErrorMessageBounds(updateMessage, screenX);								
 								//Everything is correct, send email and log the email+name to file, all on their own Thread!
 								new Thread(new Runnable() {
 									@Override
@@ -313,6 +334,224 @@ public class JavaFX extends Application {
 				calculateErrorMessageBounds(updateMessage, screenX);
 			}
 		});
+		
+		//Virtual Keyboard
+		
+		numberRow.setMinHeight(10);
+		numberRow.setMinWidth(screenX);
+		
+		QPRow.setMinHeight(10);
+		
+		ALRow.setMinHeight(10);
+		
+		ShiftZMRow.setMinHeight(10);
+		
+		spaceSpecialChars.setMinHeight(10);
+		
+		Map<Button, Character> keyboardButton = new HashMap<Button, Character>();
+		
+		//Number buttons
+		Button num1 = new Button("1");
+		numberRow.getChildren().add(num1);
+		keyboardButton.put(num1, '1');
+		
+		Button num2 = new Button("2");
+		numberRow.getChildren().add(num2);
+		keyboardButton.put(num2, '2');
+		
+		Button num3 = new Button("3");
+		numberRow.getChildren().add(num3);
+		keyboardButton.put(num3, '3');
+
+		Button num4 = new Button("4");
+		numberRow.getChildren().add(num4);
+		keyboardButton.put(num4, '4');
+
+		Button num5 = new Button("5");
+		numberRow.getChildren().add(num5);
+		keyboardButton.put(num5, '5');
+	
+		Button num6 = new Button("6");
+		numberRow.getChildren().add(num6);
+		keyboardButton.put(num6, '6');
+		
+		Button num7 = new Button("7");
+		numberRow.getChildren().add(num7);
+		keyboardButton.put(num7, '7');
+		
+		Button num8 = new Button("8");
+		numberRow.getChildren().add(num8);
+		keyboardButton.put(num8, '8');
+		
+		Button num9 = new Button("9");
+		numberRow.getChildren().add(num9);
+		keyboardButton.put(num9, '9');
+		
+		Button num0 = new Button("0");
+		numberRow.getChildren().add(num0);
+		keyboardButton.put(num0, '0');
+				
+		//Row of keys Q to P
+		Button keyQ = new Button("Q");
+		QPRow.getChildren().add(keyQ);
+		keyboardButton.put(keyQ, 'q');
+		
+		Button keyW = new Button("W");
+		QPRow.getChildren().add(keyW);
+		keyboardButton.put(keyW, 'w');
+		
+		Button keyE = new Button("E");
+		QPRow.getChildren().add(keyE);
+		keyboardButton.put(keyE, 'e');
+		
+		Button keyR = new Button("R");
+		QPRow.getChildren().add(keyR);
+		keyboardButton.put(keyR, 'r');
+		
+		Button keyT = new Button("T");
+		QPRow.getChildren().add(keyT);
+		keyboardButton.put(keyT, 't');
+		
+		Button keyY = new Button("Y");
+		QPRow.getChildren().add(keyY);
+		keyboardButton.put(keyY, 'y');
+
+		Button keyU = new Button("U");
+		QPRow.getChildren().add(keyU);
+		keyboardButton.put(keyU, 'u');
+		
+		Button keyI = new Button("I");
+		QPRow.getChildren().add(keyI);
+		keyboardButton.put(keyI, 'i');
+		
+		Button keyO = new Button("O");
+		QPRow.getChildren().add(keyO);
+		keyboardButton.put(keyO, 'o');
+		
+		Button keyP = new Button("P");
+		QPRow.getChildren().add(keyP);
+		keyboardButton.put(keyP, 'p');
+				
+		//Row of keys A to L
+		Button keyA = new Button("A");
+		ALRow.getChildren().add(keyA);
+		keyboardButton.put(keyA, 'a');
+		
+		Button keyS = new Button("S");
+		ALRow.getChildren().add(keyS);
+		keyboardButton.put(keyS, 's');
+		
+		Button keyD = new Button("D");
+		ALRow.getChildren().add(keyD);
+		keyboardButton.put(keyD, 'd');
+
+		Button keyF = new Button("F");
+		ALRow.getChildren().add(keyF);
+		keyboardButton.put(keyF, 'f');
+		
+		Button keyG = new Button("G");
+		ALRow.getChildren().add(keyG);
+		keyboardButton.put(keyG, 'g');
+		
+		Button keyH = new Button("H");
+		ALRow.getChildren().add(keyH);
+		keyboardButton.put(keyH, 'h');
+		
+		Button keyJ = new Button("J");
+		ALRow.getChildren().add(keyJ);
+		keyboardButton.put(keyJ, 'j');
+		
+		Button keyK = new Button("K");
+		ALRow.getChildren().add(keyK);
+		keyboardButton.put(keyK, 'k');
+		
+		Button keyL = new Button("L");
+		ALRow.getChildren().add(keyL);
+		keyboardButton.put(keyL, 'l');
+				
+		//Row of keys from Shift to M
+		Button keyCaps = new Button("Caps\nLock");
+		ShiftZMRow.getChildren().add(keyCaps);
+		
+		keyCaps.setOnAction(actionEvent -> {
+			//TODO Make caps button darker when selected
+			if(capslock) {
+				capslock = false;
+			} else {
+				capslock = true;
+			}
+		});
+		
+		Button keyZ = new Button("Z");
+		ShiftZMRow.getChildren().add(keyZ);
+		keyboardButton.put(keyZ, 'z');
+		
+		Button keyX = new Button("X");
+		ShiftZMRow.getChildren().add(keyX);
+		keyboardButton.put(keyX, 'x');
+		
+		Button keyC = new Button("C");
+		ShiftZMRow.getChildren().add(keyC);
+		keyboardButton.put(keyC, 'c');
+		
+		Button keyV = new Button("V");
+		ShiftZMRow.getChildren().add(keyV);
+		keyboardButton.put(keyV, 'v');
+		
+		Button keyB = new Button("B");
+		ShiftZMRow.getChildren().add(keyB);
+		keyboardButton.put(keyB, 'b');
+		
+		Button keyN = new Button("N");
+		ShiftZMRow.getChildren().add(keyN);
+		keyboardButton.put(keyN, 'n');
+		
+		Button keyM = new Button("M");
+		ShiftZMRow.getChildren().add(keyM);
+		keyboardButton.put(keyM, 'm');
+				
+		//Spacebar and special characters
+		Button keySpace = new Button("Space");
+		spaceSpecialChars.getChildren().add(keySpace);
+		keyboardButton.put(keySpace, ' ');
+		
+		Button keyAt = new Button("@");
+		spaceSpecialChars.getChildren().add(keyAt);
+		keyboardButton.put(keyAt, '@');
+		
+		Button keyDot = new Button(".");
+		spaceSpecialChars.getChildren().add(keyDot);
+		keyboardButton.put(keyDot, '.');
+		
+		Button keyPlus = new Button("+");
+		spaceSpecialChars.getChildren().add(keyPlus);
+		keyboardButton.put(keyPlus, '+');
+		
+		//Keyboard positioning
+		keyboard.setLayoutY(10);
+		keyboard.setLayoutX((screenX / 2) - (keyboard.getBoundsInParent().getWidth()) / 2);
+		
+		//Set action, minimumwidth
+		for(Map.Entry<Button, Character> map : keyboardButton.entrySet()) {
+			Button b = map.getKey();
+			String value = map.getValue().toString();
+			b.setMinSize(60, 60);
+			
+			b.setOnAction(actionEvent -> {
+				String oldText = selectedField.getText();
+				
+				String text;
+				
+				if(capslock) {
+					text = value.toUpperCase();
+				} else {
+					text = value;
+				}
+				
+				selectedField.setText(oldText + text);
+			});
+		}
+		
 	}
 	
 	void calculateErrorMessageBounds(Node node, double screenX) {
