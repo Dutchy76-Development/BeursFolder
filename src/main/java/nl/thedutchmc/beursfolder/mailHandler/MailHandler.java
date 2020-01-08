@@ -72,6 +72,11 @@ public class MailHandler {
 			//Create a multipart to add the option parts to
 			Multipart mp = new MimeMultipart();
 			
+			MimeBodyPart mbp1 = new MimeBodyPart();
+			MimeBodyPart mbp2 = new MimeBodyPart();
+			MimeBodyPart mbp3 = new MimeBodyPart();
+			MimeBodyPart mbp4 = new MimeBodyPart();
+
 			//If option1 is selected
 			if(option1) {
 				
@@ -82,12 +87,12 @@ public class MailHandler {
 				String fileURL = BeursFolder.REDIRECT_BASE_URL + emailLinkSuffix + ".html";
 				
 				//Add it to the multipart
-				BodyPart prt1 = new MimeBodyPart();
-				prt1.setText(fileURL + "\n");
-				mp.addBodyPart(prt1);
+				//BodyPart prt1 = new MimeBodyPart();
+				mbp1.setContent(fileURL + "\n", "text/html");
+				//mp.addBodyPart(prt1);
 				
 				//Send all relevant information to the server
-				sh.send(generateSocketText(emailLinkSuffix, companyName, phoneNumber, TOKEN, 1, OPTION1URL));
+				sh.send(generateSocketText(emailLinkSuffix, firstName, surName, companyName, phoneNumber, TOKEN, 1, OPTION1URL));
 			}
 			
 			//If option2 is selected
@@ -100,12 +105,12 @@ public class MailHandler {
 				String fileURL = BeursFolder.REDIRECT_BASE_URL + emailLinkSuffix + ".html";
 				
 				//Add it to the multipart
-				BodyPart prt2 = new MimeBodyPart();
-				prt2.setText(fileURL + "\n");
-				mp.addBodyPart(prt2);
+				//BodyPart prt2 = new MimeBodyPart();
+				mbp2.setContent(fileURL + "\n", "text/html");
+				//mp.addBodyPart(prt2);
 				
 				//Send all relevant information to the server
-				sh.send(generateSocketText(emailLinkSuffix, companyName, phoneNumber, TOKEN, 2, OPTION2URL));
+				sh.send(generateSocketText(emailLinkSuffix, firstName, surName, companyName, phoneNumber, TOKEN, 2, OPTION2URL));
 			}
 			
 			//If option3 is selected
@@ -118,12 +123,12 @@ public class MailHandler {
 				String fileURL = BeursFolder.REDIRECT_BASE_URL + emailLinkSuffix + ".html";
 				
 				//Add it to the multipart
-				BodyPart prt3 = new MimeBodyPart();
-				prt3.setText(fileURL + "\n");
-				mp.addBodyPart(prt3);
+				//BodyPart prt3 = new MimeBodyPart();
+				mbp3.setContent(fileURL + "\n", "text/html");
+				//mp.addBodyPart(prt3);
 				
 				//Send all relevant information to the server
-				sh.send(generateSocketText(emailLinkSuffix, companyName, phoneNumber, TOKEN, 3, OPTION3URL));
+				sh.send(generateSocketText(emailLinkSuffix, firstName, surName, companyName, phoneNumber, TOKEN, 3, OPTION3URL));
 			}
 			
 			//If option4 is selected
@@ -136,17 +141,17 @@ public class MailHandler {
 				String fileURL = BeursFolder.REDIRECT_BASE_URL + emailLinkSuffix + ".html";
 
 				//Add it to the multipart
-				BodyPart prt4 = new MimeBodyPart();
-				prt4.setText(fileURL + "\n");
-				mp.addBodyPart(prt4);
+				//BodyPart prt4 = new MimeBodyPart();
+				mbp4.setContent(fileURL + "\n", "text/html");
+				//mp.addBodyPart(prt4);
 				
 				//Send all relevant information to the server
-				sh.send(generateSocketText(emailLinkSuffix, companyName, phoneNumber, TOKEN, 4, OPTION4URL));
+				sh.send(generateSocketText(emailLinkSuffix, firstName, surName, companyName, phoneNumber, TOKEN, 4, OPTION4URL));
 			}
 			
 			//Add the multipart to a MimeBodyPart, to add to the email later
-			MimeBodyPart linkPart = new MimeBodyPart();
-			linkPart.setContent(mp);
+		//	MimeBodyPart linkPart = new MimeBodyPart();
+			//linkPart.setContent(mp);
 			
 			//The email's header
 			String header = "Dear " + firstName + ", \n";
@@ -162,7 +167,11 @@ public class MailHandler {
 			//Add the parts together
 			Multipart multipart = new MimeMultipart();
 			multipart.addBodyPart(mimeBodyPart);
-			multipart.addBodyPart(linkPart);
+			if(option1) multipart.addBodyPart(mbp1);
+			if(option2) multipart.addBodyPart(mbp2); 
+			if(option3) multipart.addBodyPart(mbp3); 
+			if(option4) multipart.addBodyPart(mbp4); 
+			//multipart.addBodyPart(linkPart);
 		//	multipart.addBodyPart(attachmentBodyPart);
 			 
 			message.setContent(multipart);
@@ -180,8 +189,8 @@ public class MailHandler {
 		return generated;
 	}
 	
-	String generateSocketText (String emailLinkSuffix, String companyName, String phoneNumber, String token, int option, String optionURL) {
-		String toSend = emailLinkSuffix + "," + companyName + "," + phoneNumber + "," + token + "," + option + ","+ optionURL;
+	String generateSocketText (String emailLinkSuffix, String firstName, String surName, String companyName, String phoneNumber, String token, int option, String optionURL) {
+		String toSend = emailLinkSuffix + "," + firstName + "," + surName + "," + companyName + "," + phoneNumber + "," + token + "," + option + ","+ optionURL;
 		return toSend;
 	}
 }

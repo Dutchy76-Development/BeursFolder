@@ -24,7 +24,6 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import nl.thedutchmc.beursfolder.BeursFolder;
 import nl.thedutchmc.beursfolder.datahandler.DataHandler;
-import nl.thedutchmc.beursfolder.mailHandler.LinkGenerator;
 import nl.thedutchmc.beursfolder.mailHandler.MailHandler;
 
 public class JavaFX extends Application {

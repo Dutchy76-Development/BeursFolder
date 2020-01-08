@@ -8,14 +8,13 @@ import java.io.IOException;
 import java.util.Properties;
 
 import nl.thedutchmc.beursfolder.gui.JavaFX;
-import nl.thedutchmc.beursfolder.mailHandler.LinkGenerator;
 import nl.thedutchmc.beursfolder.sockethandler.SocketHandler;
 
 public class BeursFolder {
 	//Variable which shouldn't be changable by the end-user
-	public static String REDIRECT_BASE_URL = "https://thedutchmc.nl/red/";
+	public static String REDIRECT_BASE_URL = "https://redirects.mrfriendly.uk/redirects/";
 	
-	public static String SERVER_ADDRESS = "localhost";
+	public static String SERVER_ADDRESS = "server.beursfolder.mrfriendly.uk";
 	public static int SERVER_PORT = 8095;
 	
 	//Properties file variables
