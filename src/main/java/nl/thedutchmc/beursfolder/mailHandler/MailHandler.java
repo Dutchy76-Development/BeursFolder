@@ -7,6 +7,7 @@ import javax.mail.internet.*;
 
 import nl.thedutchmc.beursfolder.BeursFolder;
 import nl.thedutchmc.beursfolder.sockethandler.SocketHandler;
+import nl.thedutchmc.beursfolder.mailHandler.LinkGenerator;
 
 public class MailHandler {
 
@@ -67,7 +68,7 @@ public class MailHandler {
 			}
 			
 			SocketHandler sh = new SocketHandler();
-			final LinkGenerator lg = new LinkGenerator();
+			LinkGenerator lg = new LinkGenerator();
 			
 			//Create a multipart to add the option parts to
 			Multipart mp = new MimeMultipart();
@@ -88,7 +89,7 @@ public class MailHandler {
 				
 				//Add it to the multipart
 				//BodyPart prt1 = new MimeBodyPart();
-				mbp1.setContent(fileURL + "\n", "text/html");
+				mbp1.setText("* " + fileURL + "\n");
 				//mp.addBodyPart(prt1);
 				
 				//Send all relevant information to the server
@@ -106,7 +107,7 @@ public class MailHandler {
 				
 				//Add it to the multipart
 				//BodyPart prt2 = new MimeBodyPart();
-				mbp2.setContent(fileURL + "\n", "text/html");
+				mbp2.setText("* " + fileURL + "\n");
 				//mp.addBodyPart(prt2);
 				
 				//Send all relevant information to the server
@@ -124,7 +125,7 @@ public class MailHandler {
 				
 				//Add it to the multipart
 				//BodyPart prt3 = new MimeBodyPart();
-				mbp3.setContent(fileURL + "\n", "text/html");
+				mbp3.setText("* " + fileURL + "\n");
 				//mp.addBodyPart(prt3);
 				
 				//Send all relevant information to the server
@@ -142,7 +143,7 @@ public class MailHandler {
 
 				//Add it to the multipart
 				//BodyPart prt4 = new MimeBodyPart();
-				mbp4.setContent(fileURL + "\n", "text/html");
+				mbp4.setText("* " + fileURL + "\n");
 				//mp.addBodyPart(prt4);
 				
 				//Send all relevant information to the server
@@ -154,23 +155,45 @@ public class MailHandler {
 			//linkPart.setContent(mp);
 			
 			//The email's header
-			String header = "Dear " + firstName + ", \n";
 			
 			//Add the header to a MimeBodyPart, to add to the email later
-			MimeBodyPart mimeBodyPart = new MimeBodyPart();
-			mimeBodyPart.setContent(header + "\n", "text/html");
 			
 			//The attachment
 		//	MimeBodyPart attachmentBodyPart = new MimeBodyPart();
 		//	attachmentBodyPart.attachFile(new File("C:\\Users\\tobia\\Pictures\\mekanism_fusion_chart.png")); 
+			String header = "Beste " + firstName + ", \n";
+			String par1 = "Dank voor je bezoek aan onze Mr.Friendly stand op de Horecava.\n\n"
+					+ "Tijdens je bezoek gaf je aan wat meer informatie te ontvangen. Deze informatie tref je via de volgende link(s):";
+			
+			String par2 = "\nMocht je nog meer (specifieke) informatie nodig hebben, dan horen we het graag.\n"
+					+ "\n"
+					+ "Hartelijke groeten,\r\n" 
+					+ "Mr.Friendly B.V\n"
+					+ "\n"
+					+ "Remco de Bruijn\r\n"
+					+ "06 55141994\n"
+					+ "\n"
+					+ "https://www.mrfriendly.nl";
+					
+			//Add the header to a MimeBodyPart, to add to the email later
+			MimeBodyPart headerMBP = new MimeBodyPart();
+			headerMBP.setText(header + "\n");
+
+			MimeBodyPart par1MBP = new MimeBodyPart();
+			par1MBP.setText(par1 + "\n");
+			
+			MimeBodyPart par2MBP = new MimeBodyPart();
+			par2MBP.setText(par2 + "\n");
 			
 			//Add the parts together
 			Multipart multipart = new MimeMultipart();
-			multipart.addBodyPart(mimeBodyPart);
+			multipart.addBodyPart(headerMBP);
+			multipart.addBodyPart(par1MBP);
 			if(option1) multipart.addBodyPart(mbp1);
 			if(option2) multipart.addBodyPart(mbp2); 
 			if(option3) multipart.addBodyPart(mbp3); 
-			if(option4) multipart.addBodyPart(mbp4); 
+			if(option4) multipart.addBodyPart(mbp4);
+			multipart.addBodyPart(par2MBP);
 			//multipart.addBodyPart(linkPart);
 		//	multipart.addBodyPart(attachmentBodyPart);
 			 
