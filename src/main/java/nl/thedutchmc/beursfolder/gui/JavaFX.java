@@ -52,19 +52,21 @@ public class JavaFX extends Application {
 		
 		HBox emailFirstSurnameFields = new HBox();
 		HBox phoneCompanyFields = new HBox();
-		HBox option12 = new HBox();
-		HBox option34 = new HBox();
+		//HBox option12 = new HBox();
+		//HBox option34 = new HBox();
 		
-		HBox numberRow = new HBox();
+		HBox opt1 = new HBox(), opt2 = new HBox(), opt3 = new HBox();
+		
+		/*HBox numberRow = new HBox();
 		HBox QPRow = new HBox();
 		HBox ALRow = new HBox();
 		HBox ShiftZMRow = new HBox();
-		HBox spaceSpecialChars = new HBox();
+		HBox spaceSpecialChars = new HBox();*/
 		
-		VBox keyboard = new VBox();
-		keyboard.getChildren().addAll(numberRow, QPRow, ALRow, ShiftZMRow, spaceSpecialChars);
+		//VBox keyboard = new VBox();
+		//keyboard.getChildren().addAll(numberRow, QPRow, ALRow, ShiftZMRow, spaceSpecialChars);
 		
-		Group root = new Group(option12,option34, emailFirstSurnameFields, phoneCompanyFields, keyboard);
+		Group root = new Group(/*option12,option34, */opt1, opt2, opt3, emailFirstSurnameFields, phoneCompanyFields/*, keyboard*/);
 		root.setId("root");
 		Scene scene = new Scene(root);
 		primaryStage.setScene(scene);
@@ -97,8 +99,14 @@ public class JavaFX extends Application {
 		Text title = new Text();
 		title.setId("titleText");
 		title.setText(BeursFolder.HEADER);
-		title.setY(imageView.getY() + imageView.getBoundsInParent().getHeight() + 40);
+		title.setY(imageView.getY() + imageView.getBoundsInParent().getHeight() + 50);
 		addToRoot.add(title);
+		
+		Text subtitle = new Text();
+		subtitle.setId("subtitleText");
+		subtitle.setText(BeursFolder.SUBHEADER);
+		subtitle.setY(title.getY() + title.getBoundsInParent().getHeight() + 40);
+		addToRoot.add(subtitle);
 		
 		Text agreementText = new Text();
 		agreementText.setId("agreementText");
@@ -178,6 +186,9 @@ public class JavaFX extends Application {
 		agreementBox.setLayoutY(agreementText.getY() - agreementText.getBoundsInParent().getHeight());
 		addToRoot.add(agreementBox);
 		
+		//check if the boxes need to be visible
+		option4Box.setVisible(false);
+		
 		//Add all objects to the root group
 		for(Node node : addToRoot) {
 			root.getChildren().add(node);
@@ -190,6 +201,7 @@ public class JavaFX extends Application {
 		
 		//Calculate Positions of all objects
 		title.setX((screenX /2) - (title.getBoundsInParent().getWidth() / 2)); // (screen width / 2) - (object size / 2)
+		subtitle.setX((screenX / 2) - (subtitle.getBoundsInParent().getWidth() /2));
 		imageView.setX((screenX/2) - (imageView.getBoundsInParent().getWidth() / 2));
 		submitButton.setLayoutX((screenX / 2) - (submitButton.getBoundsInParent().getWidth() / 2));
 		
@@ -216,29 +228,48 @@ public class JavaFX extends Application {
 		double option1Size = option1Box.getBoundsInParent().getWidth() + option1Text.getBoundsInParent().getWidth();
 		double option2Size = option2Box.getBoundsInParent().getWidth() + option2Text.getBoundsInParent().getWidth();
 		
-		double options12Size = option1Size + option2Size + 40;
+		opt1.getChildren().addAll(option1Box, option1Text);
+		opt2.getChildren().addAll(option2Box, option2Text);
+		opt3.getChildren().addAll(option3Box, option3Text);
 		
-		option12.getChildren().addAll(option1Box, option1Text, option2Box, option2Text);
+		HBox.setMargin(option1Box, new Insets(0,0,0,10));
+		HBox.setMargin(option2Box, new Insets(0,0,0,10));
+		HBox.setMargin(option3Box, new Insets(0,0,0,10));
+
 		
-		HBox.setMargin(option2Box, new Insets(0,10,0,40));
-		HBox.setMargin(option1Box, new Insets(0,10,0,0));
+		opt1.setLayoutX(screenX / 2 - 80);
+		opt2.setLayoutX(screenX / 2 - 80);
+		opt3.setLayoutX(screenX / 2 - 80);
 		
-		option12.setLayoutY(title.getY() + title.getBoundsInParent().getHeight() + 20);
-		option12.setLayoutX((screenX / 2) - (options12Size / 2) - 20);
+		opt1.setLayoutY(subtitle.getY() + subtitle.getBoundsInParent().getHeight() + 20);
+		opt2.setLayoutY(opt1.getLayoutY() + opt1.getBoundsInParent().getHeight() + 20);
+		opt3.setLayoutY(opt2.getLayoutY() + opt2.getBoundsInParent().getHeight() + 20);
+
+		
+		//double options12Size = option1Size + option2Size + 40;
+		
+		
+		//option12.getChildren().addAll(option1Box, option1Text, option2Box, option2Text);
+		
+		//HBox.setMargin(option2Box, new Insets(0,10,0,40));
+		//HBox.setMargin(option1Box, new Insets(0,10,0,0));
+		
+		//option12.setLayoutY(title.getY() + title.getBoundsInParent().getHeight() + 20);
+		//option12.setLayoutX((screenX / 2) - (options12Size / 2) - 20);
 		
 		//HBox for options 3 and 4
 		double option3Size = option3Box.getBoundsInParent().getWidth() + option3Text.getBoundsInParent().getWidth();
 		double option4Size = option4Box.getBoundsInParent().getWidth() + option4Text.getBoundsInParent().getWidth();
 		
-		double options34Size = option3Size + option4Size + 40;
+		//double options34Size = option3Size + option4Size + 40;
 		
-		option34.getChildren().addAll(option3Box, option3Text, option4Box, option4Text);
+		//option34.getChildren().addAll(option3Box, option3Text, option4Box, option4Text);
 		
-		HBox.setMargin(option4Box, new Insets(0,10,0,40));
-		HBox.setMargin(option3Box, new Insets(0,10,0,0));
+		//HBox.setMargin(option4Box, new Insets(0,10,0,40));
+		//HBox.setMargin(option3Box, new Insets(0,10,0,0));
 		
-		option34.setLayoutX((screenX / 2) - (options34Size / 2) - 20);
-		option34.setLayoutY(option12.getLayoutY() + option12.getBoundsInParent().getHeight() + 40);
+		//option34.setLayoutX((screenX / 2) - (options34Size / 2) - 20);
+		//option34.setLayoutY(option12.getLayoutY() + option12.getBoundsInParent().getHeight() + 40);
 		
 		//EventHandlers
 		submitButton.setOnAction(actionEvent ->  {
@@ -335,7 +366,7 @@ public class JavaFX extends Application {
 		});
 		
 		//Virtual Keyboard
-		
+		/*
 		numberRow.setMinHeight(10);
 		numberRow.setMinWidth(screenX);
 		
@@ -549,7 +580,7 @@ public class JavaFX extends Application {
 				
 				selectedField.setText(oldText + text);
 			});
-		}
+		}*/
 		
 	}
 	

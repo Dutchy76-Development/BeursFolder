@@ -1,6 +1,7 @@
 package nl.thedutchmc.beursfolder.mailHandler;
 
 import java.util.Properties;
+import java.util.concurrent.TimeUnit;
 
 import javax.mail.*;  
 import javax.mail.internet.*;
@@ -11,6 +12,8 @@ import nl.thedutchmc.beursfolder.sockethandler.SocketHandler;
 public class MailHandler {
 
 	public void sendMail(String target, String firstName, String surName, boolean option1, boolean option2, boolean option3, boolean option4, String companyName, String phoneNumber) {
+		int retryCounter = 0;
+		
 		String SUBJECT = BeursFolder.SUBJECT;
 		
 		String TOKEN = BeursFolder.TOKEN;
@@ -154,19 +157,21 @@ public class MailHandler {
 			//linkPart.setContent(mp);
 			
 			//The email's header
-			String header = "Dear " + firstName + ", \n";
-			
+			String header = "Beste " + firstName + ", \n";
+			String par1 = "Dank voor je bezoek aan onze Mr.Friendly stand op de Horecava.\n\n"
+					+ "Tijdens je bezoek gaf je aan wat meer informatie te ontvangen over: \n";
+					
 			//Add the header to a MimeBodyPart, to add to the email later
-			MimeBodyPart mimeBodyPart = new MimeBodyPart();
-			mimeBodyPart.setContent(header + "\n", "text/html");
-			
-			//The attachment
-		//	MimeBodyPart attachmentBodyPart = new MimeBodyPart();
-		//	attachmentBodyPart.attachFile(new File("C:\\Users\\tobia\\Pictures\\mekanism_fusion_chart.png")); 
+			MimeBodyPart headerMBP = new MimeBodyPart();
+			headerMBP.setContent(header + "\n", "text/html");
+
+			MimeBodyPart par1MBP = new MimeBodyPart();
+			par1MBP.setText(par1 + "\n");
 			
 			//Add the parts together
 			Multipart multipart = new MimeMultipart();
-			multipart.addBodyPart(mimeBodyPart);
+			multipart.addBodyPart(headerMBP);
+			multipart.addBodyPart(par1MBP);
 			if(option1) multipart.addBodyPart(mbp1);
 			if(option2) multipart.addBodyPart(mbp2); 
 			if(option3) multipart.addBodyPart(mbp3); 
@@ -178,9 +183,22 @@ public class MailHandler {
 			 
 			//Finally, send the email
 			Transport.send(message);
+			System.out.println("Email send to: " + target);
 						
 		} catch (Exception e) {
 			e.printStackTrace();
+			
+			System.err.println("Failed to send mail, retrying in 30 seconds!");
+			
+			try {
+				TimeUnit.SECONDS.sleep(30);
+			} catch (InterruptedException e2) {
+				e2.printStackTrace();
+			}
+			
+			if(retryCounter <= 10) {
+				sendMail(target, firstName, surName, option1, option2, option3, option4, companyName, phoneNumber);
+			}
 		}
 	}
 	

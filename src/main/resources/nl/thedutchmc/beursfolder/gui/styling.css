@@ -1,9 +1,9 @@
-.root {
-    -fx-background-color: #f00;
-}
-
 #titleText {
     -fx-font: 40px "Arial";
+}
+
+#subtitleText {
+	-fx-font: 30px "Arial";
 }
 
 #agreementText {

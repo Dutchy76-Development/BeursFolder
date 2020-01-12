@@ -30,7 +30,21 @@ public class SocketHandler {
 			socket = new Socket(address, port);
 			dos = new DataOutputStream(socket.getOutputStream());
 			
-			System.out.println("Connected to server.");
+			new Thread(new Runnable() {
+				@Override
+				public void run() {
+					while(true) {
+						if(!socket.isConnected()) {
+							try {
+								connect(false, "");
+							} catch (Exception e) {
+								e.printStackTrace();
+							}
+						}
+					}
+				}
+			}).start();
+ 			System.out.println("Connected to server.");
 						
 			staticSocket = socket;
 			
@@ -59,30 +73,26 @@ public class SocketHandler {
 		Socket soc = staticSocket;
 		
 		//create a new Thread so that the UI can continue to work
-		new Thread( new Runnable() {
-			@Override
-			public void run() {
+		System.out.println("Trying to send...");
+		if(soc.isConnected()) {
+			try {
+				dos.writeUTF(toSend);
+				System.out.println("Message sent!");
 				
-				if(soc.isConnected()) {
-					try {
-						dos.writeUTF(toSend);
-						System.out.println("Message sent!");
-						
-						dos.flush();
+				dos.flush();
 
-					} catch (IOException e) {
-						System.err.println("Unable to send to server!");
-						e.printStackTrace();
-					}
-				} else {
-					try {
-						System.out.println("Not connected to server, attempting to reconnect");
-						connect(true, toSend);
-					} catch (Exception e) {
-						e.printStackTrace();
-					}
-				}
+			} catch (IOException e) {
+				System.err.println("Unable to send to server!");
+				e.printStackTrace();
 			}
-		}).start();
+		} else {
+			try {
+				System.out.println("Not connected to server, attempting to reconnect");
+				connect(true, toSend);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+
 	}
 }

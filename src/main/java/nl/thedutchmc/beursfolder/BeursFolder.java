@@ -12,13 +12,13 @@ import nl.thedutchmc.beursfolder.sockethandler.SocketHandler;
 
 public class BeursFolder {
 	//Variable which shouldn't be changable by the end-user
-	public static String REDIRECT_BASE_URL = "https://redirects.mrfriendly.uk/redirects/";
+	public static String REDIRECT_BASE_URL = "https://mrfriendly.uk/redirects/";
 	
 	public static String SERVER_ADDRESS = "server.beursfolder.mrfriendly.uk";
 	public static int SERVER_PORT = 8095;
 	
 	//Properties file variables
-	public static String MAIL_USERNAME, MAIL_PASSWORD, HOST, PORT, SSL_TRUST, SUBJECT, HEADER, OPTION1, OPTION2, OPTION3, OPTION4, AGREEMENT, TITLE, OPTION1URL, OPTION2URL, OPTION3URL, OPTION4URL, TOKEN;
+	public static String MAIL_USERNAME, MAIL_PASSWORD, HOST, PORT, SSL_TRUST, SUBJECT, HEADER, SUBHEADER, OPTION1, OPTION2, OPTION3, OPTION4, AGREEMENT, TITLE, OPTION1URL, OPTION2URL, OPTION3URL, OPTION4URL, TOKEN;
 	public static boolean STARTTLS, AUTH;
 	
 	public static void main(String[] args) {
@@ -123,6 +123,7 @@ public class BeursFolder {
 				
 				fw.write("#UI Settings\n");
 				fw.write("header = \n");
+				fw.write("subheader = \n");
 				fw.write("option1 = \n");
 				fw.write("option2 = \n");
 				fw.write("option3 = \n");
@@ -168,6 +169,7 @@ public class BeursFolder {
 				SUBJECT = appProps.getProperty("subject");
 				
 				HEADER = appProps.getProperty("header");
+				SUBHEADER = appProps.getProperty("subheader");
 				
 				OPTION1 = appProps.getProperty("option1");
 				OPTION2 = appProps.getProperty("option2");
